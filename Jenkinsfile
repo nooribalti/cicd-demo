@@ -3,7 +3,7 @@ pipeline {
     
     tools {
         nodejs 'NodeJS'
-        dockerTool 'Docker' // Make sure 'Docker' matches the tool name configured in Jenkins
+        dockerTool 'docker' // Make sure 'Docker' matches the tool name configured in Jenkins
     }
     
     stages {
