@@ -1,8 +1,11 @@
 pipeline {
     agent any
+    
     tools {
         nodejs 'NodeJS'
+        dockerTool 'Docker' // Make sure 'Docker' matches the tool name configured in Jenkins
     }
+    
     stages {
         stage('Checkout') {
             steps {
@@ -10,6 +13,7 @@ pipeline {
                 sh 'ls -al'
             }
         }
+        
         stage('Build') {
             steps {
                 dir('cicd-app') {
@@ -17,6 +21,7 @@ pipeline {
                 }
             }
         }
+        
         stage('Test') {
             steps {
                 dir('cicd-app') {
@@ -24,21 +29,27 @@ pipeline {
                 }
             }
         }
+        
         stage('Docker Build') {
             steps {
                 script {
-                    dockerImage = docker.build("nooribalti/cicd-demo")
+                    dockerTool.withTool('Docker') {
+                        docker.build('nooribalti/cicd-demo')
+                    }
                 }
             }
         }
+        
         stage('Deploy') {
             steps {
                 script {
-                    sh '''
-                        docker stop cicd-demo || true
-                        docker rm cicd-demo || true
-                        docker run -d --name cicd-demo -p 80:80 nooribalti/cicd-demo
-                    '''
+                    dockerTool.withTool('Docker') {
+                        sh '''
+                            docker stop cicd-demo || true
+                            docker rm cicd-demo || true
+                            docker run -d --name cicd-demo -p 80:80 nooribalti/cicd-demo
+                        '''
+                    }
                 }
             }
         }
