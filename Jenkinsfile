@@ -7,6 +7,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 git url: 'https://github.com/nooribalti/cicd-demo.git', branch: 'main'
+                sh 'ls -al'
             }
         }
         stage('Build') {
