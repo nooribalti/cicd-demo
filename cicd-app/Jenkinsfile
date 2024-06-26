@@ -1,8 +1,5 @@
-
-pipeline {
-    agent {
-        docker { image 'node:14' }
-    }
+echo 'pipeline {
+    agent any
     stages {
         stage('Checkout') {
             steps {
@@ -16,7 +13,6 @@ pipeline {
         }
         stage('Test') {
             steps {
-                // Add your test commands here
                 sh 'echo "Tests passed"'
             }
         }
@@ -29,10 +25,15 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                sh 'echo "Deploying to production"'
-                docker stop my-app || true
-                docker rm my-app || true
-                docker run -d --name my-app -p 3000:3000 your-username/your-repo:latest            }
+                script {
+                    sh '''
+                        docker pull nooribalti/cicd-demo:latest
+                        docker stop cicd-demo || true
+                        docker rm cicd-demo || true
+                        docker run -d --name cicd-demo -p 80:80 nooribalti/cicd-demo:latest
+                    '''
+                }
+            }
         }
     }
 }
