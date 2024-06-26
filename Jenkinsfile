@@ -1,4 +1,4 @@
-echo 'pipeline {
+pipeline {
     agent any
     stages {
         stage('Checkout') {
@@ -27,10 +27,9 @@ echo 'pipeline {
             steps {
                 script {
                     sh '''
-                        docker pull nooribalti/cicd-demo:latest
                         docker stop cicd-demo || true
                         docker rm cicd-demo || true
-                        docker run -d --name cicd-demo -p 80:80 nooribalti/cicd-demo:latest
+                        docker run -d --name cicd-demo -p 80:80 nooribalti/cicd-demo
                     '''
                 }
             }
