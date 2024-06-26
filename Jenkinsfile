@@ -12,12 +12,16 @@ pipeline {
         }
         stage('Build') {
             steps {
-                sh 'npm install'
+                dir('cicd-app') {
+                    sh 'npm install'
+                }
             }
         }
         stage('Test') {
             steps {
-                sh 'echo "Tests passed"'
+                dir('cicd-app') {
+                    sh 'echo "Tests passed"'
+                }
             }
         }
         stage('Docker Build') {
